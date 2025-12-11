@@ -1,0 +1,358 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("USER") // USER, ADMIN, QUALITY_EVALUATOR, IT_SPECIALIST
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Vartotojo užklausos
+  requests Request[]
+  // Vartotojo atsiliepimai
+  feedbacks Feedback[]
+  // IT specialisto užduotys
+  tasks Task[]
+  // Chat žinutės
+  chatMessages ChatMessage[]
+  // Chat prieigos
+  chatAccesses ChatAccess[]
+  // Veiklos istorija
+  activities UserActivity[]
+  // Užklausų juodraščiai
+  requestDrafts RequestDraft[]
+  // Atsiliepimų juodraščiai
+  feedbackDrafts FeedbackDraft[]
+  // IT specialisto sukurtos anketos
+  surveys Survey[]
+  // Vartotojo atsakymai į anketas
+  surveyResponses SurveyResponse[]
+  
+  @@map("users")
+}
+
+model Request {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  status      String   @default("PENDING")
+  priority    String   @default("MEDIUM")
+  filters     String?  // JSON string su filtrais
+  adminNotes  String?  // Admin pastabos
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Santykiai
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("requests")
+}
+
+model Feedback {
+  id                    String   @id @default(cuid())
+  
+  // Vertinimo metrikos (1-10 skalė)
+  easeOfUse            Int      // Paprastumas naudotis
+  speed                Int      // Greitis
+  colorPalette         Int      // Spalvų paletė
+  fontStyle            Int      // Šrifto stilius
+  fontReadability      Int      // Šrifto skaitomumas
+  contentClarity       Int      // Turinio aiškumas
+  contentAmount        Int      // Turinio kiekis
+  tone                 Int      // Tonas
+  reliability          Int      // Patikimumas
+  communication        Int      // Komunikacija
+  
+  // Papildomas komentaras
+  comment              String?
+  
+  // Laiko žymės
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  
+  // Santykiai
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("feedbacks")
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  status      String   @default("TODO") // TODO, IN_PROGRESS, DONE
+  priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  startDate   DateTime
+  endDate     DateTime
+  progress    Int      @default(0) // Apskaičiuojamas automatiškai iš subtask'ų
+  color       String?  // Spalva Gantt grafike
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Santykiai
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subtasks    Subtask[]
+  
+  @@map("tasks")
+}
+
+model Subtask {
+  id          String   @id @default(cuid())
+  title       String
+  completed   Boolean  @default(false)
+  completedAt DateTime? // Kada buvo pažymėta kaip baigta
+  order       Int      @default(0) // Tvarka sąraše
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Santykiai
+  taskId      String
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  attachments Attachment[]
+  
+  @@map("subtasks")
+}
+
+model Attachment {
+  id          String   @id @default(cuid())
+  fileName    String   // Originalus failo pavadinimas
+  fileUrl     String   // URL arba kelias iki failo
+  fileSize    Int      // Failo dydis baitais
+  fileType    String   // MIME tipas (application/pdf, image/png, etc.)
+  uploadedBy  String   // Vartotojo rolė: IT_SPECIALIST arba QUALITY_EVALUATOR
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  
+  // Santykiai
+  subtaskId   String
+  subtask     Subtask  @relation(fields: [subtaskId], references: [id], onDelete: Cascade)
+  comments    AttachmentComment[]
+  
+  @@map("attachments")
+}
+
+model AttachmentComment {
+  id            String   @id @default(cuid())
+  comment       String   // Komentaras apie failą
+  authorRole    String   // IT_SPECIALIST arba QUALITY_EVALUATOR
+  authorName    String   // Vartotojo vardas
+  
+  // Laiko žymės
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Santykiai
+  attachmentId  String
+  attachment    Attachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
+  
+  @@map("attachment_comments")
+}
+
+model ChatRoom {
+  id          String   @id @default(cuid())
+  name        String   // "Darbuotojų chat" arba "Admin-Vartotojo chat"
+  type        String   // "EMPLOYEE" arba "ADMIN_USER"
+  pin         String   // 4 skaitmenų PIN
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Santykiai
+  messages    ChatMessage[]
+  accesses    ChatAccess[]
+  
+  @@map("chat_rooms")
+}
+
+model ChatMessage {
+  id          String   @id @default(cuid())
+  content     String
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  
+  // Santykiai
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  roomId      String
+  room        ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  
+  @@map("chat_messages")
+}
+
+model ChatAccess {
+  id              String   @id @default(cuid())
+  attempts        Int      @default(0) // Bandymų skaičius
+  blockedUntil    DateTime? // Blokavimo pabaigos laikas
+  lastAttemptAt   DateTime? // Paskutinio bandymo laikas
+  
+  // Laiko žymės
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Santykiai
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  roomId          String
+  room            ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, roomId])
+  @@map("chat_accesses")
+}
+
+model UserActivity {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action      String   // "LOGIN", "LOGOUT", "CREATE_REQUEST", etc.
+  entityType  String?  // "Request", "Task", "File", etc.
+  entityId    String?
+  metadata    Json?    // Papildoma informacija
+  createdAt   DateTime @default(now())
+  
+  @@map("user_activities")
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model RequestDraft {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  abandoned   Boolean  @default(false)
+  duration    Int?     // Trukmė sekundėmis (jei užbaigta)
+  formData    Json?    // Dalinai užpildyti duomenys
+  
+  @@map("request_drafts")
+  @@index([userId])
+  @@index([abandoned])
+  @@index([startedAt])
+}
+
+model FeedbackDraft {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  abandoned   Boolean  @default(false)
+  duration    Int?     // Trukmė sekundėmis (jei užbaigta)
+  
+  @@map("feedback_drafts")
+  @@index([userId])
+  @@index([abandoned])
+  @@index([startedAt])
+}
+
+// ============================================
+// ANKETŲ SISTEMA
+// ============================================
+
+model Survey {
+  id          String   @id @default(cuid())
+  title       String   // Anketos pavadinimas
+  description String?  // Anketos aprašymas
+  isActive    Boolean  @default(true) // Ar anketa aktyvi
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Santykiai
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  questions   SurveyQuestion[]
+  responses   SurveyResponse[]
+  
+  @@map("surveys")
+  @@index([createdById])
+  @@index([isActive])
+}
+
+model SurveyQuestion {
+  id          String   @id @default(cuid())
+  question    String   // Klausimo tekstas
+  type        String   // "TEXT", "MULTIPLE_CHOICE", "RATING", "YES_NO"
+  options     Json?    // Pasirinkimo variantai (jei type = MULTIPLE_CHOICE)
+  required    Boolean  @default(false)
+  order       Int      @default(0) // Klausimų tvarka
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Santykiai
+  surveyId    String
+  survey      Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  answers     SurveyAnswer[]
+  
+  @@map("survey_questions")
+  @@index([surveyId])
+}
+
+model SurveyResponse {
+  id          String   @id @default(cuid())
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Santykiai
+  surveyId    String
+  survey      Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  answers     SurveyAnswer[]
+  
+  @@map("survey_responses")
+  @@index([surveyId])
+  @@index([userId])
+}
+
+model SurveyAnswer {
+  id          String   @id @default(cuid())
+  answer      String   // Atsakymas (tekstas, skaičius, pasirinkimas)
+  
+  // Laiko žymės
+  createdAt   DateTime @default(now())
+  
+  // Santykiai
+  responseId  String
+  response    SurveyResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  
+  questionId  String
+  question    SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  @@map("survey_answers")
+  @@index([responseId])
+  @@index([questionId])
+}

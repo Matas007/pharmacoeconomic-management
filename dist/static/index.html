@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Farmakoekonominio modeliavimo valdymo sistema</title>
+    <meta name="description" content="Sistema farmakoekonominio modeliavimo užklausų valdymui" />
+    <link rel="icon" href="/favicon.ico" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .features {
+            margin-top: 2rem;
+            text-align: left;
+        }
+        
+        .features h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .features li {
+            padding: 0.5rem 0;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+        }
+        
+        .features li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .warning {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #92400e;
+        }
+        
+        .warning h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Farmakoekonominio modeliavimo sistema</h1>
+        <p>Valdykite užklausas ir projektus efektyviai</p>
+        
+        <div class="buttons">
+            <a href="/auth/signin" class="btn btn-primary">Prisijungti</a>
+            <a href="/auth/signup" class="btn btn-secondary">Registruotis</a>
+        </div>
+        
+        <div class="features">
+            <h3>Sistemos funkcijos:</h3>
+            <ul>
+                <li>Vartotojų registracija ir autentifikacija</li>
+                <li>Užklausų siuntimas su filtrais</li>
+                <li>Admin dashboard su Kanban lenta</li>
+                <li>Užklausų statuso valdymas</li>
+                <li>Farmakoekonominio modeliavimo parametrai</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <h4>Dėmesio!</h4>
+            <p>Šis statinis puslapis skirtas demonstracijai. Pilnai funkcionali sistema reikalauja serverio su duomenų baze ir autentifikacijos sistema.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,286 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useSession, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { Plus, FileText, Clock, CheckCircle, XCircle, ClipboardList, Bell } from 'lucide-react'
+import FeedbackPrompt from '@/components/FeedbackPrompt'
+import Chat from '@/components/Chat'
+
+interface Request {
+  id: string
+  title: string
+  description: string
+  status: string
+  priority: string
+  createdAt: string
+  adminNotes?: string | null
+}
+
+interface Survey {
+  id: string
+  title: string
+  description: string
+  createdAt: string
+}
+
+export default function UserDashboard() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [requests, setRequests] = useState<Request[]>([])
+  const [surveys, setSurveys] = useState<Survey[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin')
+    } else if (status === 'authenticated') {
+      fetchRequests()
+      fetchSurveys()
+    }
+  }, [status, router])
+
+  const fetchRequests = async () => {
+    try {
+      const response = await fetch('/api/user/requests')
+      if (response.ok) {
+        const data = await response.json()
+        setRequests(data)
+      }
+    } catch (error) {
+      console.error('Klaida gaunant užklausas:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchSurveys = async () => {
+    try {
+      const response = await fetch('/api/surveys')
+      if (response.ok) {
+        const data = await response.json()
+        setSurveys(data)
+      }
+    } catch (error) {
+      console.error('Klaida gaunant anketas:', error)
+    }
+  }
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return <Clock className="w-5 h-5 text-yellow-500" />
+      case 'IN_PROGRESS':
+        return <FileText className="w-5 h-5 text-blue-500" />
+      case 'COMPLETED':
+        return <CheckCircle className="w-5 h-5 text-green-500" />
+      case 'REJECTED':
+        return <XCircle className="w-5 h-5 text-red-500" />
+      default:
+        return <Clock className="w-5 h-5 text-gray-500" />
+    }
+  }
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return 'Laukiantis'
+      case 'IN_PROGRESS':
+        return 'Vykdomas'
+      case 'COMPLETED':
+        return 'Užbaigtas'
+      case 'REJECTED':
+        return 'Atmestas'
+      default:
+        return status
+    }
+  }
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'LOW':
+        return 'bg-green-100 text-green-800'
+      case 'MEDIUM':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'HIGH':
+        return 'bg-orange-100 text-orange-800'
+      case 'URGENT':
+        return 'bg-red-100 text-red-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  if (status === 'loading' || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Kraunama...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Vartotojo panelė
+              </h1>
+              <p className="text-gray-600">Sveiki, {session?.user?.name}</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Link
+                href="/user/new-request"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center space-x-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Nauja užklausa</span>
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition duration-200"
+              >
+                Atsijungti
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Survey Alert */}
+        {surveys.length > 0 && (
+          <div className="mb-8">
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-lg p-6 shadow-lg">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="relative">
+                    <Bell className="w-8 h-8 text-green-600 animate-bounce" />
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      {surveys.length}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <ClipboardList className="w-5 h-5 text-green-600" />
+                    Naujų anketų pranešimas!
+                  </h3>
+                  <p className="text-gray-700 mb-4">
+                    {surveys.length === 1 
+                      ? 'Turite 1 naują anketą, kurią galite užpildyti.' 
+                      : `Turite ${surveys.length} naujas anketas, kurias galite užpildyti.`}
+                  </p>
+                  <div className="space-y-3">
+                    {surveys.slice(0, 3).map(survey => (
+                      <div key={survey.id} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900">{survey.title}</h4>
+                            {survey.description && (
+                              <p className="text-sm text-gray-600 mt-1">{survey.description}</p>
+                            )}
+                          </div>
+                          <Link
+                            href={`/user/surveys/${survey.id}`}
+                            className="ml-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 whitespace-nowrap"
+                          >
+                            <ClipboardList className="w-4 h-4" />
+                            Atsakyti
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {surveys.length > 3 && (
+                    <Link
+                      href="/user/surveys"
+                      className="mt-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                    >
+                      Žiūrėti visas anketas ({surveys.length})
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Mano užklausos</h2>
+          
+          {requests.length === 0 ? (
+            <div className="bg-white rounded-lg shadow p-8 text-center">
+              <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Užklausų nėra
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Sukurkite pirmą užklausą farmakoekonominio modeliavimo paslaugai
+              </p>
+              <Link
+                href="/user/new-request"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200 inline-flex items-center space-x-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Sukurti užklausą</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid gap-6">
+              {requests.map((request) => (
+                <div key={request.id} className="bg-white rounded-lg shadow p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        {request.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4">{request.description}</p>
+                      
+                      {request.adminNotes && (
+                        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                          <h4 className="font-semibold text-blue-900 mb-2">Administratoriaus pastabos:</h4>
+                          <p className="text-blue-800 text-sm whitespace-pre-wrap">{request.adminNotes}</p>
+                        </div>
+                      )}
+                      
+                      <div className="flex items-center space-x-4 text-sm text-gray-500">
+                        <span>
+                          Sukurta: {new Date(request.createdAt).toLocaleDateString('lt-LT')}
+                        </span>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(request.priority)}`}>
+                          {request.priority}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 ml-4">
+                      {getStatusIcon(request.status)}
+                      <span className="text-sm font-medium text-gray-700">
+                        {getStatusText(request.status)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Feedback pranešimas */}
+      <FeedbackPrompt />
+      <Chat />
+    </div>
+  )
+}
