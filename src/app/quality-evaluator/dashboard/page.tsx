@@ -460,7 +460,7 @@ export default function QualityEvaluatorDashboard() {
                 <div className="space-y-6">
                   {feedbacks.map((feedback) => {
                     const average = metrics.reduce((sum, { key }) => 
-                      sum + feedback[key as keyof Feedback] as number, 0
+                      sum + (feedback[key as keyof Feedback] as number), 0
                     ) / metrics.length
 
                     return (

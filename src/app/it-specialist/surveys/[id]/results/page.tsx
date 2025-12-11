@@ -112,7 +112,7 @@ export default function SurveyResultsPage({ params }: { params: { id: string } }
                 cx="50%"
                 cy="50%"
                 labelLine={true}
-                label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                label={({ percent }) => percent ? `${(percent * 100).toFixed(0)}%` : '0%'}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -158,7 +158,7 @@ export default function SurveyResultsPage({ params }: { params: { id: string } }
             <div className="text-3xl font-bold text-green-600 mb-1">
               {question.stats.yesPercentage?.toFixed(0) || '0'}%
             </div>
-            <div className="text-sm text-gray-600">Atsakė "Taip"</div>
+            <div className="text-sm text-gray-600">Atsakė &quot;Taip&quot;</div>
           </div>
 
           <ResponsiveContainer width="100%" height={250}>
@@ -168,7 +168,7 @@ export default function SurveyResultsPage({ params }: { params: { id: string } }
                 cx="50%"
                 cy="50%"
                 labelLine={true}
-                label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                label={({ percent }) => percent ? `${(percent * 100).toFixed(0)}%` : '0%'}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"

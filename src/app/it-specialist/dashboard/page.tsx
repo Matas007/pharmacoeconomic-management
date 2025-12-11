@@ -683,14 +683,6 @@ function TaskFormModal({
                     </div>
                     <button
                       type="button"
-                      onClick={() => setSelectedSubtask(subtask)}
-                      className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-                      title="Pridėti failus"
-                    >
-                      <Paperclip className="w-4 h-4" />
-                    </button>
-                    <button
-                      type="button"
                       onClick={async () => {
                         if (confirm('Ištrinti šią mini dalį?')) {
                           try {
