@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "export": "next build && next export",
-    "build:netlify": "npm run build"
+    "build:netlify": "npm run build",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",
