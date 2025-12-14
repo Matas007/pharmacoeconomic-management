@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Plus, Calendar, BarChart3, CheckCircle, Clock, Trash2, Edit, X, Paperclip, FileText } from 'lucide-react'
+import { Plus, Calendar, BarChart3, CheckCircle, Clock, Trash2, Edit, X, Paperclip, FileText, Menu, LogOut } from 'lucide-react'
 import Link from 'next/link'
 import Chat from '@/components/Chat'
 import SubtaskDetailsModal from '@/components/SubtaskDetailsModal'
@@ -38,6 +38,7 @@ export default function ITSpecialistDashboard() {
   const [showNewTaskForm, setShowNewTaskForm] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [selectedSubtask, setSelectedSubtask] = useState<Subtask | null>(null)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -107,104 +108,177 @@ export default function ITSpecialistDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <BarChart3 className="w-7 h-7 text-blue-600" />
-                IT Specialisto panelė
+      <header className="bg-white shadow-sm border-b sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto mobile-container">
+          <div className="flex justify-between items-center py-3 sm:py-4">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-blue-600" />
+                <span className="truncate">IT Specialisto panelė</span>
               </h1>
-              <p className="text-gray-600">Sveiki, {session?.user?.name}</p>
+              <p className="text-xs sm:text-sm lg:text-base text-gray-600 truncate">Sveiki, {session?.user?.name}</p>
             </div>
-            <div className="flex items-center gap-4">
+            
+            {/* Desktop Actions */}
+            <div className="hidden lg:flex items-center gap-4">
               <Link
                 href="/it-specialist/surveys"
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 touch-target"
               >
                 <FileText className="w-4 h-4" />
                 Anketos
               </Link>
               <button
                 onClick={() => setShowNewTaskForm(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 touch-target"
               >
                 <Plus className="w-4 h-4" />
                 Nauja užduotis
               </button>
               <button
                 onClick={() => signOut()}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors touch-target"
               >
                 Atsijungti
               </button>
             </div>
+
+            {/* Mobile Hamburger Menu */}
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors touch-target"
+              aria-label="Menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
           </div>
         </div>
       </header>
 
+      {/* Mobile Menu Overlay */}
+      {showMobileMenu && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+            onClick={() => setShowMobileMenu(false)}
+          />
+          <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50 lg:hidden transform transition-transform">
+            <div className="p-4 border-b flex items-center justify-between">
+              <h3 className="font-semibold text-gray-900">Menu</h3>
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg touch-target"
+                aria-label="Uždaryti meniu"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <nav className="p-4 space-y-2">
+              <Link
+                href="/it-specialist/surveys"
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-3 text-sm font-medium touch-target"
+              >
+                <FileText className="w-5 h-5" />
+                Anketos
+              </Link>
+              <button
+                onClick={() => {
+                  setShowNewTaskForm(true)
+                  setShowMobileMenu(false)
+                }}
+                className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-3 text-sm font-medium touch-target"
+              >
+                <Plus className="w-5 h-5" />
+                Nauja užduotis
+              </button>
+              <button
+                onClick={() => {
+                  signOut()
+                  setShowMobileMenu(false)
+                }}
+                className="w-full bg-red-50 text-red-600 px-4 py-3 rounded-lg hover:bg-red-100 transition-colors flex items-center gap-3 text-sm font-medium touch-target"
+              >
+                <LogOut className="w-5 h-5" />
+                Atsijungti
+              </button>
+            </nav>
+          </div>
+        </>
+      )}
+
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto mobile-container py-4 sm:py-6 lg:py-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-8">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
               <div>
-                <p className="text-sm text-gray-600">Iš viso</p>
-                <p className="text-2xl font-bold text-gray-900">{tasks.length}</p>
+                <p className="text-xs sm:text-sm text-gray-600">Iš viso</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{tasks.length}</p>
               </div>
-              <BarChart3 className="w-8 h-8 text-blue-600" />
+              <BarChart3 className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 self-start sm:self-auto" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
               <div>
-                <p className="text-sm text-gray-600">Laukiančios</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-xs sm:text-sm text-gray-600">Laukiančios</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">
                   {tasks.filter(t => t.status === 'TODO').length}
                 </p>
               </div>
-              <Clock className="w-8 h-8 text-gray-600" />
+              <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-gray-600 self-start sm:self-auto" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
               <div>
-                <p className="text-sm text-gray-600">Vykdomos</p>
-                <p className="text-2xl font-bold text-blue-900">
+                <p className="text-xs sm:text-sm text-gray-600">Vykdomos</p>
+                <p className="text-xl sm:text-2xl font-bold text-blue-900">
                   {tasks.filter(t => t.status === 'IN_PROGRESS').length}
                 </p>
               </div>
-              <Calendar className="w-8 h-8 text-blue-600" />
+              <Calendar className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 self-start sm:self-auto" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
               <div>
-                <p className="text-sm text-gray-600">Užbaigtos</p>
-                <p className="text-2xl font-bold text-green-900">
+                <p className="text-xs sm:text-sm text-gray-600">Užbaigtos</p>
+                <p className="text-xl sm:text-2xl font-bold text-green-900">
                   {tasks.filter(t => t.status === 'DONE').length}
                 </p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-600" />
+              <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 self-start sm:self-auto" />
             </div>
           </div>
         </div>
 
+        {/* Mobile FAB for New Task */}
+        <button
+          onClick={() => setShowNewTaskForm(true)}
+          className="lg:hidden fixed bottom-20 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 active:bg-blue-800 z-30 touch-target"
+          title="Nauja užduotis"
+          aria-label="Nauja užduotis"
+        >
+          <Plus className="w-6 h-6" />
+        </button>
+
         {/* Gantt Chart */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Calendar className="w-6 h-6 text-blue-600" />
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-4 sm:mb-6 lg:mb-8">
+          <h2 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+            <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
             Gantt grafikas
           </h2>
           
           {tasks.length === 0 ? (
-            <div className="text-center py-12">
-              <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 mb-4">Dar nėra užduočių</p>
+            <div className="text-center py-8 sm:py-12">
+              <Calendar className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-3 sm:mb-4" />
+              <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Dar nėra užduočių</p>
               <button
                 onClick={() => setShowNewTaskForm(true)}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2"
+                className="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2 text-sm sm:text-base touch-target"
               >
                 <Plus className="w-4 h-4" />
                 Sukurti pirmą užduotį
@@ -217,8 +291,8 @@ export default function ITSpecialistDashboard() {
 
         {/* Task List */}
         <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b">
-            <h2 className="text-xl font-semibold text-gray-900">Užduočių sąrašas</h2>
+          <div className="p-4 sm:p-6 border-b">
+            <h2 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">Užduočių sąrašas</h2>
           </div>
           <div className="divide-y">
             {tasks.map((task) => (
@@ -536,10 +610,11 @@ function TaskFormModal({
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="task-title" className="block text-sm font-medium text-gray-700 mb-2">
               Pavadinimas *
             </label>
             <input
+              id="task-title"
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -549,10 +624,11 @@ function TaskFormModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="task-description" className="block text-sm font-medium text-gray-700 mb-2">
               Aprašymas
             </label>
             <textarea
+              id="task-description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -562,10 +638,11 @@ function TaskFormModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="task-status" className="block text-sm font-medium text-gray-700 mb-2">
                 Statusas
               </label>
               <select
+                id="task-status"
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -577,10 +654,11 @@ function TaskFormModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="task-priority" className="block text-sm font-medium text-gray-700 mb-2">
                 Prioritetas
               </label>
               <select
+                id="task-priority"
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -595,10 +673,11 @@ function TaskFormModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="task-start-date" className="block text-sm font-medium text-gray-700 mb-2">
                 Pradžios data *
               </label>
               <input
+                id="task-start-date"
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
@@ -608,10 +687,11 @@ function TaskFormModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="task-end-date" className="block text-sm font-medium text-gray-700 mb-2">
                 Pabaigos data *
               </label>
               <input
+                id="task-end-date"
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
@@ -622,10 +702,11 @@ function TaskFormModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="task-color" className="block text-sm font-medium text-gray-700 mb-2">
               Spalva
             </label>
             <input
+              id="task-color"
               type="color"
               value={formData.color}
               onChange={(e) => setFormData({ ...formData, color: e.target.value })}
@@ -649,6 +730,7 @@ function TaskFormModal({
                   <div key={subtask.id} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
                     <input
                       type="checkbox"
+                      id={`subtask-${subtask.id}`}
                       checked={subtask.completed}
                       onChange={async () => {
                         try {
@@ -666,6 +748,7 @@ function TaskFormModal({
                         }
                       }}
                       className="w-4 h-4 text-blue-600"
+                      aria-label={`Pažymėti "${subtask.title}" kaip ${subtask.completed ? 'neužbaigtą' : 'užbaigtą'}`}
                     />
                     <div className="flex-1 flex items-center justify-between">
                       <span className={`text-sm ${subtask.completed ? 'line-through text-gray-500' : 'text-gray-700'}`}>
@@ -698,6 +781,7 @@ function TaskFormModal({
                         }
                       }}
                       className="p-1 text-red-600 hover:bg-red-50 rounded"
+                      aria-label="Ištrinti mini dalį"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -710,6 +794,7 @@ function TaskFormModal({
             {task && (
               <div className="flex gap-2">
                 <input
+                  id="new-subtask-input"
                   type="text"
                   value={newSubtaskTitle}
                   onChange={(e) => setNewSubtaskTitle(e.target.value)}
@@ -755,6 +840,7 @@ function TaskFormModal({
                     }
                   }}
                   className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                  aria-label="Pridėti mini dalį"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
