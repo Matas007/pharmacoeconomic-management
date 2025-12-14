@@ -41,7 +41,7 @@ export default async function Home() {
               href="/auth/signup"
               className="w-full bg-gray-100 text-gray-700 py-3 sm:py-3.5 px-4 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition duration-200 block text-center font-medium touch-target"
             >
-              Registruotis
+              Prisiregistruoti
             </Link>
           </div>
         </div>

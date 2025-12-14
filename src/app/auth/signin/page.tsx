@@ -101,7 +101,7 @@ export default function SignIn() {
           <p className="text-sm sm:text-base text-gray-600">
             Neturite paskyros?{' '}
             <Link href="/auth/signup" className="text-blue-600 hover:text-blue-700 active:text-blue-800 font-medium">
-              Registruokitės
+              Prisiregistruokite
             </Link>
           </p>
         </div>

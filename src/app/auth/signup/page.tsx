@@ -305,7 +305,7 @@ export default function SignUp() {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-2.5 sm:py-3 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-400 transition duration-200 text-sm sm:text-base font-medium touch-target"
           >
-            {loading ? 'Registruojama...' : 'Registruotis'}
+            {loading ? 'Registruojama...' : 'Prisiregistruoti'}
           </button>
         </form>
 
