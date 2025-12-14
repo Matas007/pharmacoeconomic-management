@@ -202,20 +202,20 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto mobile-container">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 sm:py-4 gap-3">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Administratoriaus panelė
               </h1>
-              <p className="text-gray-600">Valdykite užklausas ir projektus</p>
+              <p className="text-sm sm:text-base text-gray-600 truncate">Valdykite užklausas ir projektus</p>
             </div>
             <button
               onClick={() => signOut()}
-              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition duration-200 flex items-center space-x-2"
+              className="bg-gray-100 text-gray-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition duration-200 flex items-center justify-center space-x-2 text-sm sm:text-base touch-target"
             >
               <LogOut className="w-4 h-4" />
               <span>Atsijungti</span>
@@ -225,52 +225,52 @@ export default function AdminDashboard() {
       </header>
 
       {/* Stats */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <FileText className="w-6 h-6 text-blue-600" />
+      <div className="max-w-7xl mx-auto mobile-container py-4 sm:py-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6 lg:mb-8">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0">
+              <div className="p-2 bg-blue-100 rounded-lg self-start">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Iš viso užklausų</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Clock className="w-6 h-6 text-yellow-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Laukiantys</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
+              <div className="sm:ml-3 lg:ml-4">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Iš viso užklausų</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.total}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <FileText className="w-6 h-6 text-blue-600" />
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0">
+              <div className="p-2 bg-yellow-100 rounded-lg self-start">
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-yellow-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Vykdomi</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.inProgress}</p>
+              <div className="sm:ml-3 lg:ml-4">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Laukiantys</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.pending}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0">
+              <div className="p-2 bg-blue-100 rounded-lg self-start">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Užbaigti</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.completed}</p>
+              <div className="sm:ml-3 lg:ml-4">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Vykdomi</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.inProgress}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 lg:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0">
+              <div className="p-2 bg-green-100 rounded-lg self-start">
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-green-600" />
+              </div>
+              <div className="sm:ml-3 lg:ml-4">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Užbaigti</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.completed}</p>
               </div>
             </div>
           </div>
@@ -278,18 +278,21 @@ export default function AdminDashboard() {
 
         {/* Kanban Board */}
         <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b">
-            <h2 className="text-lg font-semibold text-gray-900">Užklausų valdymas</h2>
-            <p className="text-gray-600">Vilkite korteles tarp stulpelių, kad keistumėte statusą</p>
+          <div className="p-4 sm:p-6 border-b">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900">Užklausų valdymas</h2>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">
+              <span className="hidden sm:inline">Vilkite korteles tarp stulpelių, kad keistumėte statusą</span>
+              <span className="sm:hidden">Vilkite korteles keisdami statusą</span>
+            </p>
           </div>
 
           <DragDropContext onDragEnd={handleDragEnd}>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="p-3 sm:p-4 lg:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                 {columns.map((column) => (
-                  <div key={column.id} className="space-y-4">
-                    <div className={`p-4 rounded-lg border-2 ${column.color}`}>
-                      <h3 className="font-semibold text-gray-900 mb-2">
+                  <div key={column.id} className="space-y-3 sm:space-y-4">
+                    <div className={`p-3 sm:p-4 rounded-lg border-2 ${column.color}`}>
+                      <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-1 sm:mb-2">
                         {column.title} ({column.requests.length})
                       </h3>
                     </div>
@@ -299,7 +302,7 @@ export default function AdminDashboard() {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className={`min-h-[200px] p-2 rounded-lg ${
+                          className={`min-h-[150px] sm:min-h-[200px] p-2 rounded-lg ${
                             snapshot.isDraggingOver ? 'bg-gray-100' : 'bg-gray-50'
                           }`}
                         >
@@ -314,47 +317,50 @@ export default function AdminDashboard() {
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
-                                  className={`bg-white rounded-lg shadow-sm border p-4 mb-3 cursor-move hover:shadow-md transition-shadow ${
+                                  className={`bg-white rounded-lg shadow-sm border p-3 sm:p-4 mb-2 sm:mb-3 cursor-move hover:shadow-md transition-shadow touch-target ${
                                     snapshot.isDragging ? 'shadow-lg' : ''
                                   }`}
                                 >
                                   <div className="flex items-start justify-between mb-2">
-                                    <h4 className="font-medium text-gray-900 text-sm">
+                                    <h4 className="font-medium text-gray-900 text-xs sm:text-sm line-clamp-2 flex-1 mr-2">
                                       {request.title}
                                     </h4>
-                                    <div className="flex items-center space-x-1">
+                                    <div className="flex items-center space-x-1 flex-shrink-0">
                                       {getStatusIcon(request.status)}
                                     </div>
                                   </div>
 
-                                  <p className="text-gray-600 text-xs mb-3 line-clamp-2">
+                                  <p className="text-gray-600 text-[11px] sm:text-xs mb-2 sm:mb-3 line-clamp-2">
                                     {request.description}
                                   </p>
 
-                                  <div className="flex items-center justify-between">
-                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(request.priority)}`}>
+                                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <span className={`px-2 py-1 rounded-full text-[10px] sm:text-xs font-medium ${getPriorityColor(request.priority)} w-fit`}>
                                       {request.priority}
                                     </span>
-                                    <span className="text-xs text-gray-500">
-                                      {new Date(request.createdAt).toLocaleDateString('lt-LT')}
+                                    <span className="text-[10px] sm:text-xs text-gray-500">
+                                      {new Date(request.createdAt).toLocaleDateString('lt-LT', { 
+                                        day: '2-digit', 
+                                        month: '2-digit' 
+                                      })}
                                     </span>
                                   </div>
 
                                   <div className="mt-2 pt-2 border-t">
                                     <div className="flex items-center justify-between">
-                                      <div className="flex items-center space-x-2">
-                                        <Users className="w-3 h-3 text-gray-400" />
-                                        <span className="text-xs text-gray-600">
+                                      <div className="flex items-center space-x-2 min-w-0 flex-1">
+                                        <Users className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                                        <span className="text-[10px] sm:text-xs text-gray-600 truncate">
                                           {request.user.name}
                                         </span>
                                       </div>
                                       <Link
                                         href={`/admin/request/${request.id}`}
                                         onClick={(e) => e.stopPropagation()}
-                                        className="text-blue-600 hover:text-blue-700 text-xs flex items-center space-x-1"
+                                        className="text-blue-600 hover:text-blue-700 active:text-blue-800 text-[10px] sm:text-xs flex items-center space-x-1 ml-2 flex-shrink-0 touch-target"
                                       >
                                         <Eye className="w-3 h-3" />
-                                        <span>Peržiūrėti</span>
+                                        <span className="hidden sm:inline">Peržiūrėti</span>
                                       </Link>
                                     </div>
                                   </div>

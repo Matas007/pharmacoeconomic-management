@@ -197,17 +197,17 @@ export default function NewRequest() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center py-4">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto mobile-container">
+          <div className="flex items-center py-3 sm:py-4">
             <Link
               href="/user/dashboard"
-              className="flex items-center text-gray-600 hover:text-gray-900 mr-4"
+              className="flex items-center text-gray-600 hover:text-gray-900 active:text-gray-950 mr-3 sm:mr-4 touch-target"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Atgal
+              <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="text-sm sm:text-base">Atgal</span>
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-lg sm:text-2xl font-bold text-gray-900">
               Nauja užklausa
             </h1>
           </div>
@@ -215,15 +215,15 @@ export default function NewRequest() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <form onSubmit={handleSubmit} className="space-y-8">
+      <main className="max-w-4xl mx-auto mobile-container py-4 sm:py-6 lg:py-8">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 lg:space-y-8">
           {/* Pagrindinė informacija */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
               Pagrindinė informacija
             </h2>
             
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
                   Užklausos pavadinimas *
@@ -233,7 +233,7 @@ export default function NewRequest() {
                   id="title"
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
                   required
                 />
               </div>
@@ -247,7 +247,7 @@ export default function NewRequest() {
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
                   required
                 />
               </div>
@@ -260,7 +260,7 @@ export default function NewRequest() {
                   id="priority"
                   value={formData.priority}
                   onChange={(e) => setFormData({...formData, priority: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
                 >
                   <option value="LOW">Žemas</option>
                   <option value="MEDIUM">Vidutinis</option>
@@ -272,27 +272,27 @@ export default function NewRequest() {
           </div>
 
           {/* Filtrai */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
               Farmakoekonominio modeliavimo filtrai
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Populiacija */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                   Tikslinė populiacija
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                   {populationOptions.map((option) => (
-                    <label key={option} className="flex items-center">
+                    <label key={option} className="flex items-center touch-target">
                       <input
                         type="checkbox"
                         checked={filters.population.includes(option)}
                         onChange={() => handleFilterChange('population', option)}
-                        className="mr-2"
+                        className="mr-2 w-4 h-4 sm:w-5 sm:h-5"
                       />
-                      <span className="text-sm text-gray-700">{option}</span>
+                      <span className="text-xs sm:text-sm text-gray-700">{option}</span>
                     </label>
                   ))}
                 </div>
@@ -300,19 +300,19 @@ export default function NewRequest() {
 
               {/* Intervencija */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                   Intervencija
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                   {interventionOptions.map((option) => (
-                    <label key={option} className="flex items-center">
+                    <label key={option} className="flex items-center touch-target">
                       <input
                         type="checkbox"
                         checked={filters.intervention.includes(option)}
                         onChange={() => handleFilterChange('intervention', option)}
-                        className="mr-2"
+                        className="mr-2 w-4 h-4 sm:w-5 sm:h-5"
                       />
-                      <span className="text-sm text-gray-700">{option}</span>
+                      <span className="text-xs sm:text-sm text-gray-700">{option}</span>
                     </label>
                   ))}
                 </div>
@@ -320,19 +320,19 @@ export default function NewRequest() {
 
               {/* Palyginimas */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                   Palyginimas
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                   {comparatorOptions.map((option) => (
-                    <label key={option} className="flex items-center">
+                    <label key={option} className="flex items-center touch-target">
                       <input
                         type="checkbox"
                         checked={filters.comparator.includes(option)}
                         onChange={() => handleFilterChange('comparator', option)}
-                        className="mr-2"
+                        className="mr-2 w-4 h-4 sm:w-5 sm:h-5"
                       />
-                      <span className="text-sm text-gray-700">{option}</span>
+                      <span className="text-xs sm:text-sm text-gray-700">{option}</span>
                     </label>
                   ))}
                 </div>
@@ -340,26 +340,26 @@ export default function NewRequest() {
 
               {/* Rezultatai */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2 sm:mb-3">
                   Rezultatai
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                   {outcomeOptions.map((option) => (
-                    <label key={option} className="flex items-center">
+                    <label key={option} className="flex items-center touch-target">
                       <input
                         type="checkbox"
                         checked={filters.outcome.includes(option)}
                         onChange={() => handleFilterChange('outcome', option)}
-                        className="mr-2"
+                        className="mr-2 w-4 h-4 sm:w-5 sm:h-5"
                       />
-                      <span className="text-sm text-gray-700">{option}</span>
+                      <span className="text-xs sm:text-sm text-gray-700">{option}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               {/* Papildomi parametrai */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="timeHorizon" className="block text-sm font-medium text-gray-700 mb-2">
                     Laiko horizontas
@@ -368,7 +368,7 @@ export default function NewRequest() {
                     id="timeHorizon"
                     value={filters.timeHorizon}
                     onChange={(e) => handleFilterChange('timeHorizon', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
                   >
                     <option value="">Pasirinkite...</option>
                     <option value="1-year">1 metai</option>
@@ -386,7 +386,7 @@ export default function NewRequest() {
                     id="perspective"
                     value={filters.perspective}
                     onChange={(e) => handleFilterChange('perspective', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
                   >
                     <option value="">Pasirinkite...</option>
                     <option value="healthcare">Sveikatos apsaugos</option>
@@ -403,7 +403,7 @@ export default function NewRequest() {
                     id="discountRate"
                     value={filters.discountRate}
                     onChange={(e) => handleFilterChange('discountRate', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
                   >
                     <option value="">Pasirinkite...</option>
                     <option value="0">0%</option>
@@ -417,22 +417,22 @@ export default function NewRequest() {
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+            <div className="bg-green-50 border border-green-200 text-green-700 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base">
               ✓ Užklausa sėkmingai išsiųsta! Nukreipiama į dashboard...
             </div>
           )}
 
-          <div className="flex justify-end">
+          <div className="flex justify-end pb-4 safe-area-inset-bottom">
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-blue-400 transition duration-200 flex items-center space-x-2"
+              className="w-full sm:w-auto bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-400 transition duration-200 flex items-center justify-center space-x-2 text-sm sm:text-base touch-target"
             >
               <Send className="w-4 h-4" />
               <span>{loading ? 'Siunčiama...' : 'Siųsti užklausą'}</span>

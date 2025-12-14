@@ -19,27 +19,27 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 sm:p-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Farmakoekonominio modeliavimo sistema
           </h1>
-          <p className="text-gray-600 mb-8">
+          <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
             Valdykite užklausas ir projektus efektyviai
           </p>
           
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Link
               href="/auth/signin"
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200 block text-center"
+              className="w-full bg-blue-600 text-white py-3 sm:py-3.5 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition duration-200 block text-center font-medium touch-target"
             >
               Prisijungti
             </Link>
             
             <Link
               href="/auth/signup"
-              className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 transition duration-200 block text-center"
+              className="w-full bg-gray-100 text-gray-700 py-3 sm:py-3.5 px-4 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition duration-200 block text-center font-medium touch-target"
             >
               Registruotis
             </Link>

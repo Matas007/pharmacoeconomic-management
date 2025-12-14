@@ -13,6 +13,7 @@ Sistema farmakoekonominio modeliavimo užklausų valdymui su vartotojų ir admin
 - ✅ **NAUJA:** Kokybės vertinimo sistema (10 metrikų)
 - ✅ **NAUJA:** Patirties įvertinimas nuo 1 iki 10
 - ✅ **NAUJA:** In-app chat su Admin (PIN apsaugotas)
+- ✅ **NAUJA:** 📱 **Pilna mobilioji optimizacija**
 
 ### Administratoriams (Darbuotojas):
 - ✅ Kanban lenta užklausų valdymui su Drag & Drop
@@ -23,6 +24,7 @@ Sistema farmakoekonominio modeliavimo užklausų valdymui su vartotojų ir admin
 - ✅ Pastabų rašymas vartotojams
 - ✅ **NAUJA:** In-app chat su Vartotojais (PIN apsaugotas)
 - ✅ **NAUJA:** Darbuotojų chat (su IT ir Kokybės vertintoju)
+- ✅ **NAUJA:** 📱 **Mobile-optimized Kanban board**
 
 ### Kokybės vertintojui (Darbuotojas):
 - ✅ Visų atsiliepimų peržiūra
@@ -52,12 +54,13 @@ Sistema farmakoekonominio modeliavimo užklausų valdymui su vartotojų ir admin
 
 - **Next.js 14** - React framework
 - **TypeScript** - Tipų saugumas
-- **Tailwind CSS** - Stilių sistema
+- **Tailwind CSS** - Stilių sistema (su mobile-first dizainu)
 - **NextAuth.js** - Autentifikacija
 - **Prisma** - ORM duomenų bazei
 - **PostgreSQL (Supabase)** - Cloud duomenų bazė
 - **React Beautiful DnD** - Drag & Drop funkcionalumas
 - **Lucide React** - Ikonos
+- **📱 Mobile Optimized** - Pilnas responsive dizainas
 
 ## 📦 Instaliacija
 
@@ -417,6 +420,32 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ### Prisma klaidos
 - Patikrinkite ar `DATABASE_URL` nustatyta
 - Paleiskite `npx prisma generate` dar kartą
+
+### 📱 Mobilioji optimizacija
+Sistema pilnai optimizuota mobiliesiems įrenginiams:
+- Responsive dizainas nuo 320px iki 1920px+
+- Touch-friendly mygtukai (≥44px)
+- Mobile-first Tailwind klasės
+- PWA ready architektūra
+- Žiūrėkite `MOBILE_OPTIMIZATION.md` daugiau informacijos
+
+## 📱 Mobilaus Naudojimo Gidas
+
+### Rekomendacijos:
+- **Telefonai (< 640px):** Visiškai palaikoma, optimizuotas single-column layout
+- **Planšetės (640-1024px):** 2-kolonų layouts, touch gestures
+- **Desktop (> 1024px):** Pilnas funkcionalumas su 4-kolonų Kanban
+
+### Touch Gestures:
+- **Kanban:** Vilkite korteles pirštais tarp kolonų
+- **Chat:** Bottom sheet telefonuose, centered modal planšetėse
+- **Forms:** Large touch targets, optimized keyboard
+
+### Performance:
+- First paint < 1.8s
+- Smooth scrolling
+- Optimized animations
+- No layout shifts
 
 ## 📝 Licencija
 

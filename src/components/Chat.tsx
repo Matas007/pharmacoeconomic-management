@@ -263,52 +263,54 @@ export default function Chat() {
       {/* Chat Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-40"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-blue-600 text-white p-3 sm:p-4 rounded-full shadow-lg hover:bg-blue-700 active:bg-blue-800 transition-colors z-40 touch-target"
         title="Atidaryti chat"
+        aria-label="Atidaryti chat"
       >
-        <MessageCircle className="w-6 h-6" />
+        <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
 
       {/* Chat Modal */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl h-[600px] flex flex-col">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50">
+          <div className="bg-white rounded-t-2xl sm:rounded-lg shadow-xl w-full sm:max-w-2xl h-[90vh] sm:h-[600px] flex flex-col safe-area-inset-bottom">
             {/* Header */}
-            <div className="p-4 border-b flex items-center justify-between bg-blue-600 text-white rounded-t-lg">
-              <h2 className="text-xl font-bold flex items-center gap-2">
-                <MessageCircle className="w-6 h-6" />
-                {selectedRoom ? selectedRoom.name : 'Chat'}
+            <div className="p-3 sm:p-4 border-b flex items-center justify-between bg-blue-600 text-white rounded-t-2xl sm:rounded-t-lg flex-shrink-0">
+              <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="truncate">{selectedRoom ? selectedRoom.name : 'Chat'}</span>
               </h2>
               <button
                 onClick={handleClose}
-                className="p-2 hover:bg-blue-700 rounded transition-colors"
+                className="p-2 hover:bg-blue-700 active:bg-blue-800 rounded transition-colors touch-target flex-shrink-0"
                 title="Uždaryti"
+                aria-label="Uždaryti chat"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-hidden flex flex-col">
+            <div className="flex-1 overflow-hidden flex flex-col min-h-0">
               {!selectedRoom ? (
                 /* Room Selection */
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <div className="p-4 sm:p-6 overflow-y-auto">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
                     Pasirinkite chat kambarį:
                   </h3>
                   {rooms.length === 0 ? (
-                    <p className="text-gray-600">Nėra prieinamų chat kambarių</p>
+                    <p className="text-sm sm:text-base text-gray-600">Nėra prieinamų chat kambarių</p>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {rooms.map((room) => (
                         <button
                           key={room.id}
                           onClick={() => handleRoomSelect(room)}
-                          className="w-full p-4 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-400 transition-colors text-left"
+                          className="w-full p-3 sm:p-4 border border-gray-300 rounded-lg hover:bg-blue-50 active:bg-blue-100 hover:border-blue-400 transition-colors text-left touch-target"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-medium text-gray-900">{room.name}</span>
-                            <Lock className="w-5 h-5 text-gray-400" />
+                            <span className="font-medium text-sm sm:text-base text-gray-900 truncate">{room.name}</span>
+                            <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0 ml-2" />
                           </div>
                         </button>
                       ))}
@@ -317,23 +319,23 @@ export default function Chat() {
                 </div>
               ) : !isUnlocked ? (
                 /* PIN Entry */
-                <div className="p-6 flex items-center justify-center flex-1">
+                <div className="p-4 sm:p-6 flex items-center justify-center flex-1 overflow-y-auto">
                   <div className="w-full max-w-sm">
-                    <div className="text-center mb-6">
-                      <Lock className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <div className="text-center mb-4 sm:mb-6">
+                      <Lock className="w-12 h-12 sm:w-16 sm:h-16 text-blue-600 mx-auto mb-3 sm:mb-4" />
+                      <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                         Įveskite PIN kodą
                       </h3>
-                      <p className="text-gray-600">4 skaitmenų PIN kodas</p>
+                      <p className="text-sm sm:text-base text-gray-600">4 skaitmenų PIN kodas</p>
                     </div>
 
                     {isBlocked ? (
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                        <div className="flex items-start gap-3">
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 mb-4">
+                        <div className="flex items-start gap-2 sm:gap-3">
                           <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-red-800 font-medium">Prieiga užblokuota</p>
-                            <p className="text-red-700 text-sm mt-1">
+                            <p className="text-sm sm:text-base text-red-800 font-medium">Prieiga užblokuota</p>
+                            <p className="text-xs sm:text-sm text-red-700 mt-1">
                               Liko {blockTimeRemaining} min. dėl per daug neteisingų bandymų.
                             </p>
                           </div>
@@ -357,21 +359,21 @@ export default function Chat() {
                               handleVerifyPin()
                             }
                           }}
-                          className="w-full px-4 py-3 text-center text-2xl tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4"
+                          className="w-full px-4 py-2.5 sm:py-3 text-center text-xl sm:text-2xl tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3 sm:mb-4 touch-target"
                           placeholder="••••"
                           autoFocus
                         />
 
                         {pinError && (
-                          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                            <p className="text-red-800 text-sm">{pinError}</p>
+                          <div className="bg-red-50 border border-red-200 rounded-lg p-2.5 sm:p-3 mb-3 sm:mb-4">
+                            <p className="text-xs sm:text-sm text-red-800">{pinError}</p>
                           </div>
                         )}
 
                         <button
                           onClick={handleVerifyPin}
                           disabled={pin.length !== 4}
-                          className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full px-4 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base touch-target"
                         >
                           Patvirtinti
                         </button>
@@ -385,7 +387,7 @@ export default function Chat() {
                         setPinError('')
                         setIsBlocked(false)
                       }}
-                      className="w-full mt-3 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                      className="w-full mt-3 px-4 py-2 text-sm sm:text-base text-gray-600 hover:text-gray-800 active:text-gray-900 transition-colors touch-target"
                     >
                       ← Atgal
                     </button>
@@ -394,27 +396,27 @@ export default function Chat() {
               ) : (
                 /* Chat Messages */
                 <>
-                  <div className="flex-1 overflow-y-auto p-4">
+                  <div className="flex-1 overflow-y-auto p-3 sm:p-4 min-h-0">
                     {messages.length === 0 ? (
                       <div className="text-center text-gray-500 mt-8">
-                        <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                        <p>Dar nėra žinučių</p>
-                        <p className="text-sm">Būkite pirmas!</p>
+                        <MessageCircle className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm sm:text-base">Dar nėra žinučių</p>
+                        <p className="text-xs sm:text-sm">Būkite pirmas!</p>
                       </div>
                     ) : (
                       groupMessagesByDate(messages).map((group, groupIndex) => (
-                        <div key={groupIndex} className="mb-4">
+                        <div key={groupIndex} className="mb-3 sm:mb-4">
                           {/* Date Separator */}
-                          <div className="flex items-center justify-center my-4">
-                            <div className="bg-gray-200 rounded-full px-3 py-1">
-                              <span className="text-xs font-medium text-gray-600">
+                          <div className="flex items-center justify-center my-3 sm:my-4">
+                            <div className="bg-gray-200 rounded-full px-2.5 sm:px-3 py-1">
+                              <span className="text-[10px] sm:text-xs font-medium text-gray-600">
                                 {formatDateSeparator(group.date)}
                               </span>
                             </div>
                           </div>
 
                           {/* Messages for this day */}
-                          <div className="space-y-3">
+                          <div className="space-y-2 sm:space-y-3">
                             {group.messages.map((message) => {
                               const isOwnMessage = message.user.id === session.user.id
                               return (
@@ -423,31 +425,31 @@ export default function Chat() {
                                   className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
                                 >
                                   <div
-                                    className={`max-w-[70%] rounded-lg p-3 ${
+                                    className={`max-w-[85%] sm:max-w-[70%] rounded-lg p-2.5 sm:p-3 ${
                                       isOwnMessage
                                         ? 'bg-blue-600 text-white'
                                         : 'bg-gray-100 text-gray-900'
                                     }`}
                                   >
-                                    <div className="flex items-center gap-2 mb-1">
+                                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
                                       <span
-                                        className={`text-xs font-medium ${
+                                        className={`text-[10px] sm:text-xs font-medium ${
                                           isOwnMessage ? 'text-blue-100' : getRoleColor(message.user.role)
                                         }`}
                                       >
                                         {message.user.name}
                                       </span>
                                       <span
-                                        className={`text-xs ${
+                                        className={`text-[9px] sm:text-xs ${
                                           isOwnMessage ? 'text-blue-200' : 'text-gray-500'
                                         }`}
                                       >
                                         ({getRoleLabel(message.user.role)})
                                       </span>
                                     </div>
-                                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                                    <p className="text-xs sm:text-sm whitespace-pre-wrap break-words">{message.content}</p>
                                     <span
-                                      className={`text-xs ${
+                                      className={`text-[10px] sm:text-xs ${
                                         isOwnMessage ? 'text-blue-200' : 'text-gray-500'
                                       } mt-1 block`}
                                     >
@@ -468,22 +470,23 @@ export default function Chat() {
                   </div>
 
                   {/* Message Input */}
-                  <form onSubmit={handleSendMessage} className="p-4 border-t">
+                  <form onSubmit={handleSendMessage} className="p-3 sm:p-4 border-t flex-shrink-0 safe-area-inset-bottom">
                     <div className="flex gap-2">
                       <input
                         type="text"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         placeholder="Rašykite žinutę..."
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="flex-1 px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent touch-target"
                       />
                       <button
                         type="submit"
                         disabled={!newMessage.trim()}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-target flex-shrink-0"
                         title="Siųsti"
+                        aria-label="Siųsti žinutę"
                       >
-                        <Send className="w-5 h-5" />
+                        <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                     </div>
                   </form>

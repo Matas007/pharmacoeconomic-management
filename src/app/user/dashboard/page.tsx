@@ -126,28 +126,30 @@ export default function UserDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto mobile-container">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 sm:py-4 gap-3 sm:gap-0">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
                 Vartotojo panelė
               </h1>
-              <p className="text-gray-600">Sveiki, {session?.user?.name}</p>
+              <p className="text-sm sm:text-base text-gray-600 truncate">Sveiki, {session?.user?.name}</p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <Link
                 href="/user/new-request"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center space-x-2"
+                className="flex-1 sm:flex-none bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition duration-200 flex items-center justify-center space-x-2 text-sm sm:text-base touch-target"
               >
                 <Plus className="w-4 h-4" />
-                <span>Nauja užklausa</span>
+                <span className="hidden xs:inline">Nauja užklausa</span>
+                <span className="xs:hidden">Nauja</span>
               </Link>
               <button
                 onClick={() => signOut()}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition duration-200"
+                className="bg-gray-100 text-gray-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition duration-200 text-sm sm:text-base touch-target"
               >
-                Atsijungti
+                <span className="hidden sm:inline">Atsijungti</span>
+                <span className="sm:hidden">✕</span>
               </button>
             </div>
           </div>
@@ -155,43 +157,43 @@ export default function UserDashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto mobile-container py-4 sm:py-6 lg:py-8">
         {/* Survey Alert */}
         {surveys.length > 0 && (
-          <div className="mb-8">
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-lg p-6 shadow-lg">
-              <div className="flex items-start gap-4">
+          <div className="mb-4 sm:mb-6 lg:mb-8">
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-lg p-4 sm:p-6 shadow-lg">
+              <div className="flex items-start gap-3 sm:gap-4">
                 <div className="flex-shrink-0">
                   <div className="relative">
-                    <Bell className="w-8 h-8 text-green-600 animate-bounce" />
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    <Bell className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 animate-bounce" />
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
                       {surveys.length}
                     </span>
                   </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                    <ClipboardList className="w-5 h-5 text-green-600" />
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                     Naujų anketų pranešimas!
                   </h3>
-                  <p className="text-gray-700 mb-4">
+                  <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">
                     {surveys.length === 1 
                       ? 'Turite 1 naują anketą, kurią galite užpildyti.' 
                       : `Turite ${surveys.length} naujas anketas, kurias galite užpildyti.`}
                   </p>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {surveys.slice(0, 3).map(survey => (
-                      <div key={survey.id} className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-900">{survey.title}</h4>
+                      <div key={survey.id} className="bg-white rounded-lg p-3 sm:p-4 shadow-sm border border-gray-200">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-sm sm:text-base text-gray-900 truncate">{survey.title}</h4>
                             {survey.description && (
-                              <p className="text-sm text-gray-600 mt-1">{survey.description}</p>
+                              <p className="text-xs sm:text-sm text-gray-600 mt-1 line-clamp-2">{survey.description}</p>
                             )}
                           </div>
                           <Link
                             href={`/user/surveys/${survey.id}`}
-                            className="ml-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 whitespace-nowrap"
+                            className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors flex items-center justify-center gap-2 whitespace-nowrap text-sm touch-target"
                           >
                             <ClipboardList className="w-4 h-4" />
                             Atsakyti
@@ -203,7 +205,7 @@ export default function UserDashboard() {
                   {surveys.length > 3 && (
                     <Link
                       href="/user/surveys"
-                      className="mt-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                      className="mt-3 sm:mt-4 inline-flex items-center gap-2 text-sm sm:text-base text-blue-600 hover:text-blue-700 active:text-blue-800 font-medium"
                     >
                       Žiūrėti visas anketas ({surveys.length})
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,45 +219,45 @@ export default function UserDashboard() {
           </div>
         )}
 
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Mano užklausos</h2>
+        <div className="mb-4 sm:mb-6 lg:mb-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Mano užklausos</h2>
           
           {requests.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-8 text-center">
-              <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <div className="bg-white rounded-lg shadow p-6 sm:p-8 text-center">
+              <FileText className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
                 Užklausų nėra
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
                 Sukurkite pirmą užklausą farmakoekonominio modeliavimo paslaugai
               </p>
               <Link
                 href="/user/new-request"
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200 inline-flex items-center space-x-2"
+                className="bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition duration-200 inline-flex items-center justify-center space-x-2 text-sm sm:text-base touch-target"
               >
                 <Plus className="w-4 h-4" />
                 <span>Sukurti užklausą</span>
               </Link>
             </div>
           ) : (
-            <div className="grid gap-6">
+            <div className="grid gap-4 sm:gap-6">
               {requests.map((request) => (
-                <div key={request.id} className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <div key={request.id} className="bg-white rounded-lg shadow p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
                         {request.title}
                       </h3>
-                      <p className="text-gray-600 mb-4">{request.description}</p>
+                      <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-3">{request.description}</p>
                       
                       {request.adminNotes && (
-                        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                          <h4 className="font-semibold text-blue-900 mb-2">Administratoriaus pastabos:</h4>
-                          <p className="text-blue-800 text-sm whitespace-pre-wrap">{request.adminNotes}</p>
+                        <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                          <h4 className="font-semibold text-sm sm:text-base text-blue-900 mb-2">Administratoriaus pastabos:</h4>
+                          <p className="text-xs sm:text-sm text-blue-800 whitespace-pre-wrap break-words">{request.adminNotes}</p>
                         </div>
                       )}
                       
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500">
                         <span>
                           Sukurta: {new Date(request.createdAt).toLocaleDateString('lt-LT')}
                         </span>
@@ -264,9 +266,9 @@ export default function UserDashboard() {
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2 ml-4">
+                    <div className="flex items-center space-x-2 sm:ml-4 justify-end sm:justify-start">
                       {getStatusIcon(request.status)}
-                      <span className="text-sm font-medium text-gray-700">
+                      <span className="text-xs sm:text-sm font-medium text-gray-700">
                         {getStatusText(request.status)}
                       </span>
                     </div>

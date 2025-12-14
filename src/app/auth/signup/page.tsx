@@ -51,31 +51,31 @@ export default function SignUp() {
         return {
           label: 'Labai silpnas',
           color: 'bg-red-600',
-          width: '20%'
+          widthClass: 'progress-20'
         }
       case 'weak':
         return {
           label: 'Silpnas',
           color: 'bg-orange-500',
-          width: '40%'
+          widthClass: 'progress-40'
         }
       case 'fair':
         return {
           label: 'Vidutinis',
           color: 'bg-yellow-500',
-          width: '60%'
+          widthClass: 'progress-60'
         }
       case 'good':
         return {
           label: 'Geras',
           color: 'bg-lime-500',
-          width: '80%'
+          widthClass: 'progress-80'
         }
       case 'strong':
         return {
           label: 'Labai stiprus',
           color: 'bg-green-600',
-          width: '100%'
+          widthClass: 'progress-100'
         }
       default:
         return null
@@ -129,14 +129,14 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Registracija</h1>
-          <p className="text-gray-600">Sukurkite naują paskyrą</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 sm:p-8 max-h-[95vh] overflow-y-auto">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Registracija</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Sukurkite naują paskyrą</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
               Vardas
@@ -147,7 +147,7 @@ export default function SignUp() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
               required
             />
           </div>
@@ -162,7 +162,7 @@ export default function SignUp() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
               required
             />
           </div>
@@ -177,38 +177,37 @@ export default function SignUp() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
               required
             />
             
             {/* Slaptažodžio stiprumo indikatorius */}
             {formData.password && strengthConfig && (
-              <div className="mt-3 space-y-3">
+              <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3">
                 {/* Progress bar */}
                 <div className="space-y-1">
-                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden relative">
                     <div 
-                      className={`h-full ${strengthConfig.color} transition-all duration-300 ease-out`}
-                      style={{ width: strengthConfig.width }}
+                      className={`h-full ${strengthConfig.color} ${strengthConfig.widthClass} transition-all duration-300 ease-out absolute top-0 left-0`}
                     />
                   </div>
                   <div className="flex justify-end">
-                    <span className="text-xs font-medium text-gray-700">
+                    <span className="text-[10px] sm:text-xs font-medium text-gray-700">
                       Stiprumas: <span className="font-semibold">{strengthConfig.label}</span>
                     </span>
                   </div>
                 </div>
                 
                 {/* Kriterijai su varnelėmis */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
+                <div className="space-y-1.5 sm:space-y-2">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm">
+                    <div className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${
                       passwordCriteria.length ? 'bg-green-500' : 'bg-gray-300'
                     }`}>
                       {passwordCriteria.length ? (
-                        <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                        <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" strokeWidth={3} />
                       ) : (
-                        <X className="w-3 h-3 text-gray-500" strokeWidth={3} />
+                        <X className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500" strokeWidth={3} />
                       )}
                     </div>
                     <span className={passwordCriteria.length ? 'text-gray-700' : 'text-gray-500'}>
@@ -216,14 +215,14 @@ export default function SignUp() {
                     </span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
+                  <div className="flex items-center gap-2 text-xs sm:text-sm">
+                    <div className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${
                       passwordCriteria.uppercase ? 'bg-green-500' : 'bg-gray-300'
                     }`}>
                       {passwordCriteria.uppercase ? (
-                        <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                        <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" strokeWidth={3} />
                       ) : (
-                        <X className="w-3 h-3 text-gray-500" strokeWidth={3} />
+                        <X className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500" strokeWidth={3} />
                       )}
                     </div>
                     <span className={passwordCriteria.uppercase ? 'text-gray-700' : 'text-gray-500'}>
@@ -231,14 +230,14 @@ export default function SignUp() {
                     </span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
+                  <div className="flex items-center gap-2 text-xs sm:text-sm">
+                    <div className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${
                       passwordCriteria.lowercase ? 'bg-green-500' : 'bg-gray-300'
                     }`}>
                       {passwordCriteria.lowercase ? (
-                        <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                        <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" strokeWidth={3} />
                       ) : (
-                        <X className="w-3 h-3 text-gray-500" strokeWidth={3} />
+                        <X className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500" strokeWidth={3} />
                       )}
                     </div>
                     <span className={passwordCriteria.lowercase ? 'text-gray-700' : 'text-gray-500'}>
@@ -246,14 +245,14 @@ export default function SignUp() {
                     </span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
+                  <div className="flex items-center gap-2 text-xs sm:text-sm">
+                    <div className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${
                       passwordCriteria.number ? 'bg-green-500' : 'bg-gray-300'
                     }`}>
                       {passwordCriteria.number ? (
-                        <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                        <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" strokeWidth={3} />
                       ) : (
-                        <X className="w-3 h-3 text-gray-500" strokeWidth={3} />
+                        <X className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500" strokeWidth={3} />
                       )}
                     </div>
                     <span className={passwordCriteria.number ? 'text-gray-700' : 'text-gray-500'}>
@@ -261,14 +260,14 @@ export default function SignUp() {
                     </span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
+                  <div className="flex items-center gap-2 text-xs sm:text-sm">
+                    <div className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${
                       passwordCriteria.special ? 'bg-green-500' : 'bg-gray-300'
                     }`}>
                       {passwordCriteria.special ? (
-                        <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                        <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" strokeWidth={3} />
                       ) : (
-                        <X className="w-3 h-3 text-gray-500" strokeWidth={3} />
+                        <X className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500" strokeWidth={3} />
                       )}
                     </div>
                     <span className={passwordCriteria.special ? 'text-gray-700' : 'text-gray-500'}>
@@ -290,13 +289,13 @@ export default function SignUp() {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 touch-target"
               required
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
@@ -304,16 +303,16 @@ export default function SignUp() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:bg-blue-400 transition duration-200"
+            className="w-full bg-blue-600 text-white py-2.5 sm:py-3 px-4 rounded-lg hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-400 transition duration-200 text-sm sm:text-base font-medium touch-target"
           >
             {loading ? 'Registruojama...' : 'Registruotis'}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-600">
+        <div className="mt-4 sm:mt-6 text-center">
+          <p className="text-sm sm:text-base text-gray-600">
             Jau turite paskyrą?{' '}
-            <Link href="/auth/signin" className="text-blue-600 hover:text-blue-700">
+            <Link href="/auth/signin" className="text-blue-600 hover:text-blue-700 active:text-blue-800 font-medium">
               Prisijunkite
             </Link>
           </p>
