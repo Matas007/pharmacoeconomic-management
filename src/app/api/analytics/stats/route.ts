@@ -119,23 +119,18 @@ export async function GET(req: NextRequest) {
     )
 
     // 3. Conversion rate (completed vs abandoned)
-    // FIX: Skaičiuojame tik unikalius drafts pagal userId + dieną
-    const totalRequestStarted = await prisma.requestDraft.groupBy({
-      by: ['userId'],
+    // Skaičiuojame visus pradėtus drafts (ne tik unikalius vartotojus)
+    const totalRequestDraftsCount = await prisma.requestDraft.count({
       where: {
         startedAt: {
           gte: startDate
         }
-      },
-      _max: {
-        startedAt: true
       }
     })
 
-    const totalRequestDrafts = totalRequestStarted.length
     const completedCount = completedDrafts.length
-    const requestConversionRate = totalRequestDrafts > 0
-      ? Math.round((completedCount / totalRequestDrafts) * 100)
+    const requestConversionRate = totalRequestDraftsCount > 0
+      ? Math.round((completedCount / totalRequestDraftsCount) * 100)
       : 0
 
     // ========================================
@@ -197,22 +192,18 @@ export async function GET(req: NextRequest) {
       : 0
 
     // 6. Feedback conversion rate
-    const totalFeedbackStarted = await prisma.feedbackDraft.groupBy({
-      by: ['userId'],
+    // Skaičiuojame visus pradėtus drafts (ne tik unikalius vartotojus)
+    const totalFeedbackDraftsCount = await prisma.feedbackDraft.count({
       where: {
         startedAt: {
           gte: startDate
         }
-      },
-      _max: {
-        startedAt: true
       }
     })
 
-    const totalFeedbackDrafts = totalFeedbackStarted.length
     const feedbackCompletedCount = completedFeedback.length
-    const feedbackConversionRate = totalFeedbackDrafts > 0
-      ? Math.round((feedbackCompletedCount / totalFeedbackDrafts) * 100)
+    const feedbackConversionRate = totalFeedbackDraftsCount > 0
+      ? Math.round((feedbackCompletedCount / totalFeedbackDraftsCount) * 100)
       : 0
 
     // ========================================
