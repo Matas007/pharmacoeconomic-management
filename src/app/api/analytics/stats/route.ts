@@ -119,18 +119,10 @@ export async function GET(req: NextRequest) {
     )
 
     // 3. Conversion rate (completed vs abandoned)
-    // Skaičiuojame visus pradėtus drafts (ne tik unikalius vartotojus)
-    const totalRequestDraftsCount = await prisma.requestDraft.count({
-      where: {
-        startedAt: {
-          gte: startDate
-        }
-      }
-    })
-
+    // Skaičiuojame tik užbaigtus ir nebaigtus (ne tarpiniuose stadijose)
     const completedCount = completedDrafts.length
-    const requestConversionRate = totalRequestDraftsCount > 0
-      ? Math.round((completedCount / totalRequestDraftsCount) * 100)
+    const requestConversionRate = (completedCount + totalAbandoned) > 0
+      ? Math.round((completedCount / (completedCount + totalAbandoned)) * 100)
       : 0
 
     // ========================================
@@ -192,18 +184,10 @@ export async function GET(req: NextRequest) {
       : 0
 
     // 6. Feedback conversion rate
-    // Skaičiuojame visus pradėtus drafts (ne tik unikalius vartotojus)
-    const totalFeedbackDraftsCount = await prisma.feedbackDraft.count({
-      where: {
-        startedAt: {
-          gte: startDate
-        }
-      }
-    })
-
+    // Skaičiuojame tik užbaigtus ir nebaigtus (ne tarpiniuose stadijose)
     const feedbackCompletedCount = completedFeedback.length
-    const feedbackConversionRate = totalFeedbackDraftsCount > 0
-      ? Math.round((feedbackCompletedCount / totalFeedbackDraftsCount) * 100)
+    const feedbackConversionRate = (feedbackCompletedCount + totalAbandonedFeedback) > 0
+      ? Math.round((feedbackCompletedCount / (feedbackCompletedCount + totalAbandonedFeedback)) * 100)
       : 0
 
     // ========================================
