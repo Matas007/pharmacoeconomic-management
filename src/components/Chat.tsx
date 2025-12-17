@@ -278,7 +278,7 @@ export default function Chat() {
             <div className="p-3 sm:p-4 border-b flex items-center justify-between bg-blue-600 text-white rounded-t-2xl sm:rounded-t-lg flex-shrink-0">
               <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-                <span className="truncate">{selectedRoom ? selectedRoom.name : 'Chat'}</span>
+                <span className="truncate">{selectedRoom ? selectedRoom.name : 'Pokalbiai'}</span>
               </h2>
               <button
                 onClick={handleClose}

@@ -121,7 +121,7 @@ export default function AnalyticsPage() {
             <div>
               <div className="flex items-center gap-3">
                 <TrendingUp className="w-8 h-8 text-blue-600" />
-                <h1 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Analitikos Skydelis</h1>
                 <p className="text-sm text-gray-600">Vartotojų elgsenos analizė</p>
               </div>
             </div>
@@ -158,7 +158,7 @@ export default function AnalyticsPage() {
             <div className="bg-white rounded-lg shadow p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Conversion Rate</p>
+                  <p className="text-sm text-gray-600">Konversijos Rodiklis</p>
                   <p className="text-2xl font-bold text-green-600">
                     {analytics.requestMetrics.conversionRate}%
                   </p>
@@ -188,7 +188,7 @@ export default function AnalyticsPage() {
             <div className="bg-white rounded-lg shadow p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Dead Hang</p>
+                  <p className="text-sm text-gray-600">Nebaigta</p>
                   <p className="text-2xl font-bold text-red-600">
                     {analytics.requestMetrics.totalAbandoned}
                   </p>
@@ -229,7 +229,7 @@ export default function AnalyticsPage() {
             <div className="bg-white rounded-lg shadow p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Conversion Rate</p>
+                  <p className="text-sm text-gray-600">Konversijos Rodiklis</p>
                   <p className="text-2xl font-bold text-green-600">
                     {analytics.feedbackMetrics.conversionRate}%
                   </p>
@@ -259,7 +259,7 @@ export default function AnalyticsPage() {
             <div className="bg-white rounded-lg shadow p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Dead Hang</p>
+                  <p className="text-sm text-gray-600">Nebaigta</p>
                   <p className="text-2xl font-bold text-red-600">
                     {analytics.feedbackMetrics.totalAbandoned}
                   </p>
@@ -415,10 +415,10 @@ export default function AnalyticsPage() {
 
           {/* Recent Abandoned Requests */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-4">Paskutiniai Dead Hang (užklausos)</h2>
+            <h2 className="text-lg font-semibold mb-4">Paskutinės Nebaigtos (užklausos)</h2>
             <div className="space-y-3">
               {analytics.requestMetrics.recentAbandoned.length === 0 ? (
-                <p className="text-sm text-gray-500 italic">Nėra dead hang užklausų 🎉</p>
+                <p className="text-sm text-gray-500 italic">Nėra nebaigtų užklausų 🎉</p>
               ) : (
                 analytics.requestMetrics.recentAbandoned.map((draft) => (
                   <div key={draft.id} className="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
@@ -446,10 +446,10 @@ export default function AnalyticsPage() {
 
           {/* Recent Abandoned Feedback */}
           <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
-            <h2 className="text-lg font-semibold mb-4">Paskutiniai Dead Hang (atsiliepimai)</h2>
+            <h2 className="text-lg font-semibold mb-4">Paskutiniai Nebaigti (atsiliepimai)</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {analytics.feedbackMetrics.recentAbandoned.length === 0 ? (
-                <p className="text-sm text-gray-500 italic">Nėra dead hang atsiliepimų 🎉</p>
+                <p className="text-sm text-gray-500 italic">Nėra nebaigtų atsiliepimų 🎉</p>
               ) : (
                 analytics.feedbackMetrics.recentAbandoned.map((draft) => (
                   <div key={draft.id} className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
