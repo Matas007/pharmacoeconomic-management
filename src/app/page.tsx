@@ -26,7 +26,7 @@ export default async function Home() {
             Farmakoekonominio modeliavimo sistema
           </h1>
           <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
-            Valdykite užklausas ir projektus efektyviai
+            Valdyti užklausas Kanban lentoje efektyviai
           </p>
           
           <div className="space-y-3 sm:space-y-4">

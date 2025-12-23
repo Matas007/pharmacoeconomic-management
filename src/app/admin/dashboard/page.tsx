@@ -216,7 +216,7 @@ export default function AdminDashboard() {
               <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Administratoriaus panelė
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 truncate">Valdykite užklausas ir projektus</p>
+              <p className="text-sm sm:text-base text-gray-600 truncate">Valdyti užklausas Kanban lentoje</p>
             </div>
             <button
               onClick={() => signOut()}
