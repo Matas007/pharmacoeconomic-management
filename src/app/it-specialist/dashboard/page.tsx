@@ -562,7 +562,7 @@ function TaskFormModal({
     priority: task?.priority || 'MEDIUM',
     startDate: task?.startDate ? task.startDate.split('T')[0] : new Date().toISOString().split('T')[0],
     endDate: task?.endDate ? task.endDate.split('T')[0] : new Date().toISOString().split('T')[0],
-    color: task?.color || '#3b82f6'
+    color: task?.color || '#2c3e50'
   })
   const [subtasks, setSubtasks] = useState<Subtask[]>(task?.subtasks || [])
   const [newSubtaskTitle, setNewSubtaskTitle] = useState('')

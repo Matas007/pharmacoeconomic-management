@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
         startDate: new Date(startDate),
         endDate: new Date(endDate),
         progress: 0, // Pradžioje 0%, apskaičiuojamas pagal subtask'us
-        color: color || '#3b82f6',
+        color: color || '#2c3e50',
         userId: session.user.id
       },
       include: {

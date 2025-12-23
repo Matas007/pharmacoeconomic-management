@@ -47,7 +47,7 @@ button, a, input, select, textarea {
   input:focus,
   select:focus,
   textarea:focus {
-    outline: 2px solid #2563eb;
+    outline: 2px solid #2c3e50;
     outline-offset: 2px;
   }
 }
