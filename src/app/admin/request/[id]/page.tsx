@@ -181,7 +181,7 @@ export default function RequestView() {
             href="/admin/dashboard"
             className="text-blue-600 hover:text-blue-700"
           >
-            Grįžti į dashboard
+            Grįžti į skydelį
           </Link>
         </div>
       </div>
@@ -206,7 +206,7 @@ export default function RequestView() {
               className="flex items-center text-gray-600 hover:text-gray-900 mr-4"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Atgal į dashboard
+              Atgal į skydelį
             </Link>
             <h1 className="text-2xl font-bold text-gray-900">
               Užklausos peržiūra

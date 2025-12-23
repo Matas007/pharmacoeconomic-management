@@ -44,7 +44,7 @@ export default function UserSurveysPage() {
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
-            Grįžti į dashboard
+            Grįžti į skydelį
           </Link>
           
           <h1 className="text-3xl font-bold text-gray-900 mt-4">Anketos</h1>

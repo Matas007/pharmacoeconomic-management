@@ -130,7 +130,7 @@ export default function SurveyRespondPage({ params }: { params: { id: string } }
             href="/user/dashboard"
             className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            Grįžti į dashboard
+            Grįžti į skydelį
           </Link>
         </div>
       </div>

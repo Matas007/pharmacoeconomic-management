@@ -98,7 +98,7 @@ export default function SurveysPage() {
               href="/it-specialist/dashboard"
               className="text-gray-600 hover:text-gray-900"
             >
-              ← Grįžti į dashboard
+              ← Grįžti į skydelį
             </Link>
           </div>
         </div>
