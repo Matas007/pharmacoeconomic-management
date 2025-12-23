@@ -35,9 +35,9 @@ export default function AdminDashboard() {
   const [columns, setColumns] = useState<KanbanColumn[]>([])
   const [stats, setStats] = useState({
     total: 0,
-    pending: 0,
-    inProgress: 0,
-    completed: 0
+    last7Days: 0,
+    last14Days: 0,
+    last30Days: 0
   })
   const [mounted, setMounted] = useState(false)
 
@@ -105,11 +105,16 @@ export default function AdminDashboard() {
   }
 
   const calculateStats = (requests: Request[]) => {
+    const now = new Date()
+    const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+    const last14Days = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000)
+    const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+
     setStats({
       total: requests.length,
-      pending: requests.filter(r => r.status === 'PENDING').length,
-      inProgress: requests.filter(r => r.status === 'IN_PROGRESS').length,
-      completed: requests.filter(r => r.status === 'COMPLETED').length
+      last7Days: requests.filter(r => new Date(r.createdAt) >= last7Days).length,
+      last14Days: requests.filter(r => new Date(r.createdAt) >= last14Days).length,
+      last30Days: requests.filter(r => new Date(r.createdAt) >= last30Days).length
     })
   }
 
@@ -245,8 +250,8 @@ export default function AdminDashboard() {
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-yellow-600" />
               </div>
               <div className="sm:ml-3 lg:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-gray-600">Laukiantys</p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.pending}</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Gautos per 7 dienas</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.last7Days}</p>
               </div>
             </div>
           </div>
@@ -257,8 +262,8 @@ export default function AdminDashboard() {
                 <FileText className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600" />
               </div>
               <div className="sm:ml-3 lg:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-gray-600">Vykdomi</p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.inProgress}</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Gautos per 14 dienų</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.last14Days}</p>
               </div>
             </div>
           </div>
@@ -269,8 +274,8 @@ export default function AdminDashboard() {
                 <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-green-600" />
               </div>
               <div className="sm:ml-3 lg:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-gray-600">Užbaigti</p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.completed}</p>
+                <p className="text-xs sm:text-sm font-medium text-gray-600">Gautos per 30 dienų</p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.last30Days}</p>
               </div>
             </div>
           </div>
