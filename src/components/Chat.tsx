@@ -463,12 +463,6 @@ export default function Chat() {
                         >
                           Sukurti PIN
                         </button>
-
-                        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                          <p className="text-xs text-gray-600">
-                            <strong>ℹ️ Svarbu:</strong> Admin naudoja PIN <strong>5678</strong> visiems USER chatams. Jūsų PIN tik jums!
-                          </p>
-                        </div>
                       </>
                     ) : (
                       <>
