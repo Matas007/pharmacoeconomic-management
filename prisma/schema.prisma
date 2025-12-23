@@ -17,6 +17,7 @@ model User {
   password  String
   name      String
   role      String   @default("USER") // USER, ADMIN, QUALITY_EVALUATOR, IT_SPECIALIST
+  chatPin   String?  // USER custom chat PIN (ADMIN naudoja ChatRoom.pin=5678)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   

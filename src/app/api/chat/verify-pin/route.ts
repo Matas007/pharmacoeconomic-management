@@ -88,8 +88,36 @@ export async function POST(req: NextRequest) {
       }, { status: 429 })
     }
 
-    // Patikrinti PIN
-    if (pin === room.pin) {
+    // Patikrinti PIN pagal rolę
+    let isPinCorrect = false
+
+    if (room.type === 'EMPLOYEE') {
+      // Darbuotojų chat - naudoja ChatRoom.pin (1234)
+      isPinCorrect = (pin === room.pin)
+    } else if (room.type === 'ADMIN_USER') {
+      if (userRole === 'ADMIN') {
+        // ADMIN - naudoja ChatRoom.pin (5678) visiems USER chatams
+        isPinCorrect = (pin === room.pin)
+      } else if (userRole === 'USER') {
+        // USER - naudoja savo unikalų chatPin
+        const user = await prisma.user.findUnique({
+          where: { id: session.user.id },
+          select: { chatPin: true }
+        })
+
+        if (!user?.chatPin) {
+          // USER dar nesukūrė PIN
+          return NextResponse.json({
+            error: 'Neturite sukūrę chat PIN',
+            needsSetup: true
+          }, { status: 400 })
+        }
+
+        isPinCorrect = (pin === user.chatPin)
+      }
+    }
+
+    if (isPinCorrect) {
       // Teisingas PIN - nustatyti attempts į 0
       await prisma.chatAccess.update({
         where: { id: access.id },

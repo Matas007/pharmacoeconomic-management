@@ -28,7 +28,9 @@ export default function Chat() {
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null)
   const [isUnlocked, setIsUnlocked] = useState(false)
   const [pin, setPin] = useState('')
+  const [confirmPin, setConfirmPin] = useState('')
   const [pinError, setPinError] = useState('')
+  const [needsSetup, setNeedsSetup] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [isBlocked, setIsBlocked] = useState(false)
@@ -91,6 +93,42 @@ export default function Chat() {
       }
     } catch (error) {
       console.error('Klaida gaunant žinutes:', error)
+    }
+  }
+
+  const handleSetupPin = async () => {
+    if (pin.length !== 4 || confirmPin.length !== 4) {
+      setPinError('PIN turi būti 4 skaitmenys')
+      return
+    }
+
+    if (pin !== confirmPin) {
+      setPinError('PIN nesutampa')
+      return
+    }
+
+    try {
+      const res = await fetch('/api/user/chat-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin, confirmPin })
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        setNeedsSetup(false)
+        setPinError('')
+        // Po setup, automatiškai bandyti verify su sukurtu PIN
+        setTimeout(() => {
+          handleVerifyPin()
+        }, 500)
+      } else {
+        setPinError(data.error || 'Klaida kuriant PIN')
+      }
+    } catch (error) {
+      console.error('Klaida kuriant PIN:', error)
+      setPinError('Serverio klaida')
     }
   }
 
@@ -159,12 +197,29 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const handleRoomSelect = (room: ChatRoom) => {
+  const handleRoomSelect = async (room: ChatRoom) => {
     setSelectedRoom(room)
     setIsUnlocked(false)
     setPin('')
+    setConfirmPin('')
     setPinError('')
     setMessages([])
+    setNeedsSetup(false)
+
+    // Tikrinti ar USER reikia sukurti PIN
+    if (session?.user?.role === 'USER') {
+      try {
+        const res = await fetch('/api/user/chat-pin')
+        if (res.ok) {
+          const data = await res.json()
+          if (data.needsSetup) {
+            setNeedsSetup(true)
+          }
+        }
+      } catch (error) {
+        console.error('Klaida tikrinant PIN:', error)
+      }
+    }
   }
 
   const handleClose = () => {
@@ -172,9 +227,11 @@ export default function Chat() {
     setSelectedRoom(null)
     setIsUnlocked(false)
     setPin('')
+    setConfirmPin('')
     setPinError('')
     setMessages([])
     setIsBlocked(false)
+    setNeedsSetup(false)
   }
 
   const getRoleColor = (role: string) => {
@@ -324,9 +381,11 @@ export default function Chat() {
                     <div className="text-center mb-4 sm:mb-6">
                       <Lock className="w-12 h-12 sm:w-16 sm:h-16 text-blue-600 mx-auto mb-3 sm:mb-4" />
                       <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                        Įveskite PIN kodą
+                        {needsSetup ? 'Sukurkite savo PIN' : 'Įveskite PIN kodą'}
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-600">4 skaitmenų PIN kodas</p>
+                      <p className="text-sm sm:text-base text-gray-600">
+                        {needsSetup ? 'Pirma karta - sukurkite 4 skaitmenų PIN' : '4 skaitmenų PIN kodas'}
+                      </p>
                     </div>
 
                     {isBlocked ? (
@@ -341,6 +400,76 @@ export default function Chat() {
                           </div>
                         </div>
                       </div>
+                    ) : needsSetup ? (
+                      <>
+                        <div className="space-y-3 sm:space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                              Naujas PIN (4 skaitmenys)
+                            </label>
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              maxLength={4}
+                              value={pin}
+                              onChange={(e) => {
+                                const value = e.target.value.replace(/[^0-9]/g, '')
+                                setPin(value)
+                                setPinError('')
+                              }}
+                              className="w-full px-4 py-2.5 sm:py-3 text-center text-xl sm:text-2xl tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent touch-target"
+                              placeholder="••••"
+                              autoFocus
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                              Patvirtinkite PIN
+                            </label>
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              maxLength={4}
+                              value={confirmPin}
+                              onChange={(e) => {
+                                const value = e.target.value.replace(/[^0-9]/g, '')
+                                setConfirmPin(value)
+                                setPinError('')
+                              }}
+                              onKeyPress={(e) => {
+                                if (e.key === 'Enter' && pin.length === 4 && confirmPin.length === 4) {
+                                  handleSetupPin()
+                                }
+                              }}
+                              className="w-full px-4 py-2.5 sm:py-3 text-center text-xl sm:text-2xl tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent touch-target"
+                              placeholder="••••"
+                            />
+                          </div>
+                        </div>
+
+                        {pinError && (
+                          <div className="bg-red-50 border border-red-200 rounded-lg p-2.5 sm:p-3 mt-3 sm:mt-4">
+                            <p className="text-xs sm:text-sm text-red-800">{pinError}</p>
+                          </div>
+                        )}
+
+                        <button
+                          onClick={handleSetupPin}
+                          disabled={pin.length !== 4 || confirmPin.length !== 4}
+                          className="w-full px-4 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base touch-target mt-4"
+                        >
+                          Sukurti PIN
+                        </button>
+
+                        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                          <p className="text-xs text-gray-600">
+                            <strong>ℹ️ Svarbu:</strong> Admin naudoja PIN <strong>5678</strong> visiems USER chatams. Jūsų PIN tik jums!
+                          </p>
+                        </div>
+                      </>
                     ) : (
                       <>
                         <input
@@ -384,8 +513,10 @@ export default function Chat() {
                       onClick={() => {
                         setSelectedRoom(null)
                         setPin('')
+                        setConfirmPin('')
                         setPinError('')
                         setIsBlocked(false)
+                        setNeedsSetup(false)
                       }}
                       className="w-full mt-3 px-4 py-2 text-sm sm:text-base text-gray-600 hover:text-gray-800 active:text-gray-900 transition-colors touch-target"
                     >
