@@ -39,7 +39,16 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Neturite prieigos prie šio chat' }, { status: 403 })
       }
     } else if (room.type === 'ADMIN_USER') {
-      if (!['ADMIN', 'USER'].includes(userRole)) {
+      // ADMIN gali prieiti prie visų USER kambarių
+      if (userRole === 'ADMIN') {
+        // OK
+      } 
+      // USER gali prieiti tik prie savo kambario
+      else if (userRole === 'USER') {
+        if (room.userId !== session.user.id) {
+          return NextResponse.json({ error: 'Neturite prieigos prie šio chat' }, { status: 403 })
+        }
+      } else {
         return NextResponse.json({ error: 'Neturite prieigos prie šio chat' }, { status: 403 })
       }
     }

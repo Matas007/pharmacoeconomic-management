@@ -30,16 +30,58 @@ export async function GET() {
       }
     }
 
-    if (userRole === 'ADMIN' || userRole === 'USER') {
-      // Admin ir User mato admin-user chat
-      const adminUserRoom = await prisma.chatRoom.findFirst({
-        where: { type: 'ADMIN_USER' }
+    if (userRole === 'USER') {
+      // USER mato tik savo privatų kambarį su ADMIN
+      let userRoom = await prisma.chatRoom.findFirst({
+        where: { 
+          type: 'ADMIN_USER',
+          userId: session.user.id
+        }
       })
-      if (adminUserRoom) {
+      
+      // Jei kambario nėra - sukurti automatiškai
+      if (!userRoom) {
+        userRoom = await prisma.chatRoom.create({
+          data: {
+            name: `Chat su ${session.user.name}`,
+            type: 'ADMIN_USER',
+            pin: '5678', // Default PIN
+            userId: session.user.id
+          }
+        })
+      }
+      
+      rooms.push({
+        id: userRoom.id,
+        name: 'Chat su Admin',
+        type: userRoom.type
+      })
+    }
+
+    if (userRole === 'ADMIN') {
+      // ADMIN mato visus privačius USER kambarius
+      const userRooms = await prisma.chatRoom.findMany({
+        where: { 
+          type: 'ADMIN_USER',
+          userId: { not: null }
+        },
+        include: {
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
+        }
+      })
+      
+      for (const room of userRooms) {
         rooms.push({
-          id: adminUserRoom.id,
-          name: adminUserRoom.name,
-          type: adminUserRoom.type
+          id: room.id,
+          name: `Chat su ${room.owner?.name || 'Vartotoju'}`,
+          type: room.type,
+          userId: room.userId
         })
       }
     }

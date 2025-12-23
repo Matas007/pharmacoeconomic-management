@@ -30,6 +30,8 @@ model User {
   chatMessages ChatMessage[]
   // Chat prieigos
   chatAccesses ChatAccess[]
+  // Privatūs chat kambariai (ADMIN_USER tipo)
+  chatRooms ChatRoom[]
   // Veiklos istorija
   activities UserActivity[]
   // Užklausų juodraščiai
@@ -174,6 +176,8 @@ model ChatRoom {
   name        String   // "Darbuotojų chat" arba "Admin-Vartotojo chat"
   type        String   // "EMPLOYEE" arba "ADMIN_USER"
   pin         String   // 4 skaitmenų PIN
+  userId      String?  // ADMIN_USER tipo kambariams - kam priklauso šis privatus chat
+  owner       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   // Laiko žymės
   createdAt   DateTime @default(now())
@@ -183,6 +187,7 @@ model ChatRoom {
   messages    ChatMessage[]
   accesses    ChatAccess[]
   
+  @@unique([type, userId]) // Vienas ADMIN_USER kambarys vienam vartotojui
   @@map("chat_rooms")
 }
 

@@ -19,6 +19,30 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'RoomId privalomas' }, { status: 400 })
     }
 
+    // Patikrinti prieigą prie kambario
+    const room = await prisma.chatRoom.findUnique({
+      where: { id: roomId }
+    })
+
+    if (!room) {
+      return NextResponse.json({ error: 'Kambarys nerastas' }, { status: 404 })
+    }
+
+    const userRole = session.user.role
+
+    // Tikrinti prieigą
+    if (room.type === 'EMPLOYEE') {
+      if (!['ADMIN', 'IT_SPECIALIST', 'QUALITY_EVALUATOR'].includes(userRole)) {
+        return NextResponse.json({ error: 'Neturite prieigos' }, { status: 403 })
+      }
+    } else if (room.type === 'ADMIN_USER') {
+      if (userRole === 'USER' && room.userId !== session.user.id) {
+        return NextResponse.json({ error: 'Neturite prieigos' }, { status: 403 })
+      } else if (!['ADMIN', 'USER'].includes(userRole)) {
+        return NextResponse.json({ error: 'Neturite prieigos' }, { status: 403 })
+      }
+    }
+
     const messages = await prisma.chatMessage.findMany({
       where: {
         roomId: roomId
@@ -59,6 +83,30 @@ export async function POST(req: NextRequest) {
 
     if (!roomId || !content || content.trim() === '') {
       return NextResponse.json({ error: 'RoomId ir content privalomi' }, { status: 400 })
+    }
+
+    // Patikrinti prieigą prie kambario
+    const room = await prisma.chatRoom.findUnique({
+      where: { id: roomId }
+    })
+
+    if (!room) {
+      return NextResponse.json({ error: 'Kambarys nerastas' }, { status: 404 })
+    }
+
+    const userRole = session.user.role
+
+    // Tikrinti prieigą
+    if (room.type === 'EMPLOYEE') {
+      if (!['ADMIN', 'IT_SPECIALIST', 'QUALITY_EVALUATOR'].includes(userRole)) {
+        return NextResponse.json({ error: 'Neturite prieigos' }, { status: 403 })
+      }
+    } else if (room.type === 'ADMIN_USER') {
+      if (userRole === 'USER' && room.userId !== session.user.id) {
+        return NextResponse.json({ error: 'Neturite prieigos' }, { status: 403 })
+      } else if (!['ADMIN', 'USER'].includes(userRole)) {
+        return NextResponse.json({ error: 'Neturite prieigos' }, { status: 403 })
+      }
     }
 
     const message = await prisma.chatMessage.create({
