@@ -25,9 +25,9 @@ export default async function Home() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Farmakoekonominio modeliavimo sistema
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
-            Valdykite užklausas ir projektus efektyviai
-          </p>
+            <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
+              Sveiki atvykę
+            </p>
           
           <div className="space-y-3 sm:space-y-4">
             <Link
