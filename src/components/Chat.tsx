@@ -51,9 +51,7 @@ export default function Chat() {
     }
   }, [isUnlocked, selectedRoom])
 
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+  // Auto-scroll pašalintas - vartotojas pats nusprendžia kur scrollinti
 
   useEffect(() => {
     if (isBlocked && blockTimeRemaining > 0) {
